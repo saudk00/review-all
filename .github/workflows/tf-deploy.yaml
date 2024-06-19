@@ -1,0 +1,50 @@
+name: Terraform Deploy 
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs: #consists of steps
+  infra-deploy: #could be any name
+    runs-on: ubuntu-latest #runner; who will it execute on
+
+    steps: #list job or step should be clonning our repo
+    - name: clone-codebase
+      uses: actions/checkout@v2 #preconfigured action by github marketplace that allows you to clone ur repo
+
+    - name: install Terraform
+      uses: hashicorp/setup-terraform@v1 #action is uses; uses this action to setup terraform; found in github marketplace
+      with: #installs specific version for this action; parameters for action
+        terraform_version: 1.1.0
+    
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESSKEY }}
+        aws-secret-access-key: ${{ secrets.SECRETACCESSKEY }}
+        aws-region: us-east-1
+    
+    - name: terraform init #follow terraform format: init, validate, plan, then apply
+      id: init
+      run: terraform init
+      working-directory: terraform
+
+    - name: terraform validate
+      id: validate
+      run: terraform validate
+      working-directory: terraform
+
+    - name: terraform plan
+      id: plan
+      run: terraform plan
+      working-directory: terraform
+
+    - name: terraform apply
+      id: apply
+      run: terraform apply -auto-approve
+      working-directory: terraform
