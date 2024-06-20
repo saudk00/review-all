@@ -9,7 +9,7 @@ resource "aws_autoscaling_group" "testasg" {
     force_delete = true
 
     launch_template {
-      id = var.lt-id
+      id = var.lt_id
       version = "$Latest"
     }
 }

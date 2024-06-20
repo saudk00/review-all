@@ -1,6 +1,6 @@
 module "asg" {
   source = "./modules/asg"
-  lt-id = module.lt.lt-id
+  lt_id = module.lt.lt_id
   az1a = module.alb.az1a
   az1b = module.alb.az1b
   depends_on = [ module.lt ]
